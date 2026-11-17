@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f2">
+  <meta name="description" content="An interactive, bilingual visual guide to algorithms, operating systems, and networking.">
+  <title>Learning Visualizer — learn by watching</title>
+  <link rel="stylesheet" href="./style.css">
+  <script>
+    try {
+      const savedTheme = localStorage.getItem('lv-theme');
+      if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+    } catch {}
+  </script>
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Learning Visualizer home">
+      <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span>learning<span class="brand-light">/</span>visualizer</span>
+    </a>
+    <div class="top-actions">
+      <span class="offline-label"><span class="live-dot"></span><span data-copy="ready">READY TO EXPLORE</span></span>
+      <button class="icon-button" id="theme-button" type="button" aria-label="Toggle dark theme" title="Toggle theme">◐</button>
+      <button class="language-button" id="language-button" type="button" aria-label="Switch to Tamil">தமிழ்</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div class="eyebrow"><span class="eyebrow-line"></span><span data-copy="eyebrow">INTERACTIVE LEARNING LAB</span></div>
+      <h1><span data-copy="titleOne">Big ideas,</span><br><span class="title-accent" data-copy="titleTwo">made visible.</span></h1>
+      <p data-copy="introText">Follow each step. See what changes. Learn at your own pace.</p>
+    </section>
+
+    <section class="workspace" aria-label="Algorithm visualizer">
+      <aside class="sidebar">
+        <div class="section-label"><span data-copy="explore">EXPLORE</span><span class="tiny-count">06</span></div>
+        <label class="sr-only" for="algorithm-select" data-copy="chooseAlgorithm">Choose an algorithm</label>
+        <select id="algorithm-select" class="algorithm-select">
+          <optgroup label="SORTING" data-category="Sorting">
+            <option value="bubble">Bubble Sort</option>
+            <option value="insertion">Insertion Sort</option>
+            <option value="quick">Quick Sort</option>
+          </optgroup>
+          <optgroup label="SEARCHING" data-category="Searching">
+            <option value="binary">Binary Search</option>
+          </optgroup>
+          <optgroup label="OPERATING SYSTEMS" data-category="Operating systems">
+            <option value="fcfs">FCFS Scheduling</option>
+          </optgroup>
+          <optgroup label="NETWORKING" data-category="Networking">
+            <option value="tcp">TCP Handshake</option>
+          </optgroup>
+        </select>
+
+        <div class="algorithm-heading">
+          <span class="category-pill" id="category-pill">SORTING</span>
+          <h2 id="algorithm-title">Bubble Sort</h2>
+          <p id="algorithm-description">Repeatedly compare neighbors and move larger values toward the end.</p>
+        </div>
+
+        <div class="complexity">
+          <div><span data-copy="time">TIME</span><strong id="time-complexity">O(n²)</strong></div>
+          <div><span data-copy="space">SPACE</span><strong id="space-complexity">O(1)</strong></div>
+        </div>
+
+        <div class="input-section" id="input-section">
+          <div class="section-label"><span data-copy="yourInput">YOUR INPUT</span></div>
+          <div id="array-fields">
+            <label for="array-input" data-copy="arrayLabel">Array values</label>
+            <input id="array-input" type="text" value="9, 4, 7, 2, 8, 1" autocomplete="off" spellcheck="false">
+            <p class="input-hint" data-copy="arrayHint">2–16 whole numbers, separated by commas.</p>
+            <div id="target-field" hidden>
+              <label for="target-input" data-copy="targetLabel">Search for</label>
+              <input id="target-input" type="number" value="18" step="1">
+              <p class="input-hint" data-copy="sortedHint">Binary Search needs an ascending array.</p>
+            </div>
+          </div>
+          <div id="process-field" hidden>
+            <label for="process-input" data-copy="processLabel">Process : CPU burst @ arrival</label>
+            <input id="process-input" type="text" value="P1:4, P2:2, P3:5" autocomplete="off" spellcheck="false">
+            <p class="input-hint" data-copy="processHint">Example: P1:4@0, P2:2@1 (arrival is optional).</p>
+          </div>
+          <p id="input-error" class="input-error" role="alert" hidden></p>
+          <button class="apply-button" id="apply-button" type="button"><span data-copy="applyInput">Apply input</span><span aria-hidden="true">↗</span></button>
+        </div>
+
+        <button class="share-button" id="share-button" type="button"><span aria-hidden="true">↗</span><span data-copy="share">Share this visual</span></button>
+      </aside>
+
+      <div class="visualizer">
+        <div class="stage-heading">
+          <div>
+            <span class="section-label" data-copy="visualization">VISUALIZATION</span>
+            <h2 id="stage-title">Array in motion</h2>
+          </div>
+          <div class="step-counter"><span data-copy="step">STEP</span><strong id="step-number">01</strong><span class="counter-divider">/</span><span id="step-total">01</span></div>
+        </div>
+
+        <div id="visual-stage" class="visual-stage" role="img" aria-label="Algorithm visualization">
+          <div id="array-visual" class="array-visual"></div>
+          <div id="schedule-visual" class="schedule-visual" hidden></div>
+          <div id="network-visual" class="network-visual" hidden></div>
+        </div>
+
+        <div class="legend" id="array-legend">
+          <span><i class="legend-dot dot-active"></i><span data-copy="comparing">Comparing</span></span>
+          <span><i class="legend-dot dot-sorted"></i><span data-copy="sorted">Sorted</span></span>
+          <span id="pivot-legend" hidden><i class="legend-dot dot-pivot"></i><span data-copy="pivot">Pivot</span></span>
+        </div>
+
+        <div class="explanation" aria-live="polite" aria-atomic="true">
+          <span class="explanation-index" id="explanation-index">01</span>
+          <p id="explanation-text">Start with the input values.</p>
+        </div>
+
+        <div class="playback">
+          <div class="playback-buttons">
+            <button class="control-button" id="reset-button" type="button" aria-label="Reset">↺</button>
+            <button class="control-button" id="previous-button" type="button" aria-label="Previous step">←</button>
+            <button class="play-button" id="play-button" type="button"><span aria-hidden="true">▶</span><span data-copy="play">Play</span></button>
+            <button class="control-button" id="next-button" type="button" aria-label="Next step">→</button>
+          </div>
+          <label class="speed-control"><span data-copy="speed">SPEED</span><input id="speed-input" type="range" min="1" max="5" value="3"><span id="speed-value">1×</span></label>
+        </div>
+        <input id="timeline" class="timeline" type="range" min="0" max="0" value="0" aria-label="Step timeline">
+
+        <div class="stats">
+          <div><span class="stat-icon">↔</span><span data-copy="comparisons">Comparisons</span><strong id="comparison-count">0</strong></div>
+          <div><span class="stat-icon">⇄</span><span data-copy="swaps">Swaps</span><strong id="swap-count">0</strong></div>
+        </div>
+      </div>
+
+      <aside class="code-panel">
+        <div class="code-heading"><span class="section-label" data-copy="underTheHood">UNDER THE HOOD</span><span class="code-language">PSEUDOCODE</span></div>
+        <div id="code-lines" class="code-lines" aria-label="Algorithm pseudocode"></div>
+        <div class="code-note"><span class="note-icon">✳</span><p data-copy="codeNote">The highlighted line is what the algorithm is doing right now.</p></div>
+        <div class="concept-card">
+          <span class="section-label" data-copy="keyIdea">KEY IDEA</span>
+          <p id="key-idea">Small, repeated comparisons make the order emerge.</p>
+        </div>
+      </aside>
+    </section>
+
+    <footer><span data-copy="footer">Built for curious minds.</span><span class="footer-mark">LV<span>.</span></span></footer>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </main>
+</body>
+</html>
